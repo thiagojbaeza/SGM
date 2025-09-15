@@ -34,14 +34,9 @@ export class TipoUsuarioDAO{
     } 
 
     public async updateTipoUsuario(tipoUsuario: ITipoUsuario, id:string){
-        const sql = "update tb_tipo_usuario set ds_tipo_usuario=?, fg_ativo =?, dt_ultima_alteracao =NOW(), id_usuario_ultima_alteracao=? where id_tipo_usuario =? ";
+        const sql = "update tb_tipo_usuario set ds_tipo_usuario=?, fg_ativo=?, dt_ultima_alteracao =NOW(), id_usuario_ultima_alteracao=? where id_tipo_usuario =? ";
         await this.db.execute(sql, [tipoUsuario.ds_tipo_usuario, tipoUsuario.fg_ativo, tipoUsuario.id_usuario_ultima_alteracao, id]);
-    } 
-
-/*     public async updateTipoUsuario(tipoUsuario: ITipoUsuario, id:string){
-        const sql = "update tb_tipo_usuario set ds_tipo_usuario=?, fg_ativo=?, dt_ultima_alteracao=NOW(), id_usuario_ultima_alteracao=? where id_tipo_usuario =? ";
-        await this.db.execute(sql, [tipoUsuario.ds_tipo_usuario,tipoUsuario.fg_ativo, tipoUsuario.id_usuario_ultima_alteracao, id]);
-    }  */
+    }  
         
     public async deleteTipoUsuario(tipoUsuario: ITipoUsuario, id:string){
         const sql = "update tb_tipo_usuario set fg_ativo =0, dt_ultima_alteracao =NOW(), id_usuario_ultima_alteracao=? where id_tipo_usuario =? ";

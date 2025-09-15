@@ -16,7 +16,7 @@ export class MaquinaController{
         }
     }
 
-    public async addTipoUsuario(token: string, maquina:IMaquina ){
+    public async addMaquina(token: string, maquina:IMaquina ){
         if(this.token.validateToken(token)){
             const result = await this.maquinaEntity.addMaquina(maquina);
             return {payload: result, success: true};
@@ -25,14 +25,14 @@ export class MaquinaController{
         }
     }
     
-/*     public async updateTipoUsuario(token: string, tipoUsuario:ITipoUsuario, id: string){
+    public async updateMaquina(token: string, maquina:IMaquina, id: string){
         if(this.token.validateToken(token)){
-            const result = await this.tipoUsuarioEntity.updateTipoUsuario(tipoUsuario, id);
+            const result = await this.maquinaEntity.updateMaquina(maquina, id);
             return {payload: result, success: true};
         }else{
             return {payload: null, success: false};
         }
-    } */
+    } 
 
     public async deleteMaquina(token: string, maquina:IMaquina, id: string){
         if(this.token.validateToken(token)){

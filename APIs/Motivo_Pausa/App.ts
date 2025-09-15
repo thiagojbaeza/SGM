@@ -1,24 +1,24 @@
 import fastify from 'fastify';
-import { MaquinaController } from './Controllers/MaquinaController.ts';
-import type { IMaquina } from './Database/Entities/Maquina.ts';
+import { MotivoPausaController } from './Controllers/MotivoPausaController.ts';
+import type { IMotivoPausa } from './Database/Entities/MotivoPausa.ts';
 
 const api = fastify({
     logger: true
 });
 
-const controller = new MaquinaController();
+const controller = new MotivoPausaController();
 
 api.get('/:id', async function (request, response) {
     const { id } = request.params as { id: string };
     const token = request.headers["token"] as string;
-    const data = await controller.getMaquina(token, id);    
+    const data = await controller.getMotivoPausa(token, id);    
     response.send({ result: data.payload?.length ? data.payload : "Id nao encontrado! verifique infos.", 
         success: data.payload!.length >0 });
 });
 
 api.post('/', async function (request, response) {
     const token = request.headers["token"] as string;
-    const data = await controller.addMaquina(token, request.body as IMaquina);    
+    const data = await controller.addMotivoPausa(token, request.body as IMotivoPausa);    
     if(data.success === true){
         response.send({ result:"Registro inserido com sucesso!"});
     }else{
@@ -29,7 +29,7 @@ api.post('/', async function (request, response) {
 api.put('/:id', async function (request, response) {
     const token = request.headers["token"] as string;
     const { id } = request.params as { id: string };
-    const data = await controller.updateMaquina(token, request.body as IMaquina, id);    
+    const data = await controller.updateMotivoPausa(token, request.body as IMotivoPausa, id);    
     if(data.success === true){
         response.send({ result:"Registro alterado com sucesso!"});
     }else{
@@ -40,7 +40,7 @@ api.put('/:id', async function (request, response) {
 api.delete('/:id', async function (request, response) {
     const token = request.headers["token"] as string;
     const { id } = request.params as { id: string };
-    await controller.deleteMaquina(token,request.body as IMaquina, id);    
+    await controller.deleteMotivoPausa(token,request.body as IMotivoPausa, id);    
     response.send({ result:"Registro deletado com sucesso!"});
 });
 

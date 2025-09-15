@@ -37,10 +37,10 @@ export class MaquinaDAO{
         await this.db.execute(sql, [maquina.cd_maquina, maquina.ds_nome_maquina, maquina.nr_disponibilidade_maquina, maquina.nr_parada_programada, maquina.nr_parada_nao_programada, maquina.id_usuario_criacao]);
     } 
 
-/*     public async updateMaquina(maquina: IMaquina, id:string){
-        const sql = "update tb_tipo_usuario set ds_tipo_usuario=?, fg_ativo =?, dt_ultima_alteracao =NOW(), id_usuario_ultima_alteracao=? where id_tipo_usuario =? ";
-        await this.db.execute(sql, [tipoUsuario.ds_tipo_usuario, tipoUsuario.fg_ativo, tipoUsuario.id_usuario_ultima_alteracao, id]);
-    }  */
+    public async updateMaquina(maquina: IMaquina, id:string){
+        const sql = "update tb_maquina set cd_maquina=?, ds_nome_maquina=?,nr_disponibilidade_maquina =?, nr_parada_programada =?, nr_parada_nao_programada=?, fg_ativo =?, dt_ultima_alteracao =NOW(), id_usuario_ultima_alteracao=? where id_maquina =? ";
+        await this.db.execute(sql, [maquina.cd_maquina, maquina.ds_nome_maquina, maquina.nr_disponibilidade_maquina,maquina.nr_parada_nao_programada, maquina.nr_parada_nao_programada, maquina.fg_ativo, maquina.id_usuario_ultima_alteracao, id]);
+    }  
         
     public async deleteMaquina(maquina: IMaquina, id:string){
         const sql = "update tb_maquina set fg_ativo =0, dt_ultima_alteracao =NOW(), id_usuario_ultima_alteracao=? where id_maquina =? ";
