@@ -101,6 +101,21 @@ body {
   color: #9e9ea4;
 }
 
+.sidebar-list-subItem {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding-top: 25px;
+  padding-left: 40px;
+  font-size: 18px;
+  text-decoration: none;  
+}
+
+.sidebar-list-subItem:hover {
+  text-decoration: underline;
+}
+
 .sidebar-responsive {
   display: inline !important;
   position: absolute;
@@ -224,4 +239,8 @@ body {
   .hedaer-left {
     display: none;
   }
+}
+
+.hide{
+  display: none;
 }

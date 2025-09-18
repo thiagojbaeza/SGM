@@ -5,7 +5,9 @@ import
  from 'react-icons/bs'
 
 function Sidebar({openSidebarToggle, OpenSidebar}) {
-  return (
+    const [openMenu, setOpenMenu] = React.useState(false)
+
+    return (
     <aside id="sidebar" className={openSidebarToggle ? "sidebar-responsive": ""}>
         <div className='sidebar-title'>
             <div className='sidebar-brand'>
@@ -13,17 +15,24 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
             </div>
             <span className='icon close_icon' onClick={OpenSidebar}>X</span>
         </div>
-
         <ul className='sidebar-list'>
-            <li className='sidebar-list-item'>
-                <a href="">
+            <li className='sidebar-list-item'>                    
+                <div onClick={() => window.location.href = "/"}>
                     <BsGrid1X2Fill className='icon'/> Dashboard
-                </a>
+                </div>
             </li>
-            <li className='sidebar-list-item'>
-                <a href="">
-                    <BsFillArchiveFill className='icon'/> Produtos
-                </a>
+            <li className='sidebar-list-item' onClick={() => setOpenMenu(!openMenu)}>
+                <div>
+                    <BsFillArchiveFill /> Cadastros
+                </div>
+                <div className={openMenu ? 'sidebar-list-subItem' : 'hide'}>
+                    <div onClick={() => window.location.href = "/?=produtos"}>
+                        Produtos
+                    </div>
+                    <div onClick={() => window.location.href = "/?=tipoprodutos"}>
+                        Tipo de produtos
+                    </div>
+                </div>
             </li>
             <li className='sidebar-list-item'>
                 <a href="">
