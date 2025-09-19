@@ -7,9 +7,7 @@ import Produtos from './components/produtos/page'
 import TipoProdutos from './components/tipoprodutos/page'
 
 function App() {
-  //alert(window.location.search)
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false)
-
   const OpenSidebar = () => {
     setOpenSidebarToggle(!openSidebarToggle)
   }
