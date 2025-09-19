@@ -1,37 +1,58 @@
-import { useState } from 'react'
-import './App.css'
-import Header from './components/header/page'
-import Sidebar from './components/sidebar/page'
-import Home from './components/home/page'
-import Produtos from './components/produtos/page'
-import TipoProdutos from './components/tipoprodutos/page'
+import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './layout.jsx';
+import Home from './components/home/page';
+import Produtos from './components/produtos/page';
+import TipoProdutos from './components/tipoprodutos/page';
+import Login from './components/login/page';
+
+const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 
 function App() {
-  const [openSidebarToggle, setOpenSidebarToggle] = useState(false)
-  const OpenSidebar = () => {
-    setOpenSidebarToggle(!openSidebarToggle)
-  }
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem('theme') === 'dark';
+  });
 
-  const selectContent = () => {
-    switch (window.location.search) {
-      case "?=produtos":
-        return <Produtos />
-      case "?=tipoprodutos":
-        return <TipoProdutos />  
-      default:
-        return <Home />
-    }
-  }
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
+
+  useEffect(() => {
+    document.body.className = darkMode ? 'dark' : 'light';
+    localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+
+    const handleResize = () => {
+      setSidebarOpen(window.innerWidth > 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+  }, [darkMode]);
 
   return (
-    <div className='grid-container'>
-      <Header OpenSidebar={OpenSidebar}/>
-      <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar}/>
-      {
-        selectContent()
-      }
-    </div>
-  )
+    <Router>
+      <Routes>
+        {!isAuthenticated ? (
+          <Route path="*" element={<Login />} />
+        ) : (
+          <Route
+            path="/"
+            element={
+              <Layout
+                darkMode={darkMode}
+                setDarkMode={setDarkMode}
+                sidebarOpen={sidebarOpen}
+                setSidebarOpen={setSidebarOpen}
+              />
+            }
+          >
+            <Route index element={<Home />} />
+            <Route path="produtos" element={<Produtos />} />
+            <Route path="tipoprodutos" element={<TipoProdutos />} />
+          </Route>
+        )}
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;

@@ -1,23 +1,21 @@
-import React from 'react'
-import {BsFillBellFill, BsFillEnvelopeFill, BsPersonCircle, BsSearch, BsJustify}
- from 'react-icons/bs'
+import './Header.css';
+import { FiMenu } from 'react-icons/fi';
 
-function Header({OpenSidebar}) {
+export default function Header({ darkMode, setDarkMode, toggleSidebar }) {
   return (
-    <header className='header'>
-        <div className='menu-icon'>
-            <BsJustify className='icon' onClick={OpenSidebar}/>
-        </div>
-        <div className='header-left'>
-            <BsSearch  className='icon'/>
-        </div>
-        <div className='header-right'>
-            <BsFillBellFill className='icon'/>
-            <BsFillEnvelopeFill className='icon'/>
-            <BsPersonCircle className='icon'/>
-        </div>
+    <header className="header">
+      <button className="menu-button" onClick={toggleSidebar}>
+        <FiMenu size={24} />
+      </button>
+      <h1>Movelaria Ponce</h1>
+      <label className="switch">
+        <input
+          type="checkbox"
+          checked={darkMode}
+          onChange={() => setDarkMode(!darkMode)}
+        />
+        <span className="slider"></span>
+      </label>
     </header>
-  )
+  );
 }
-
-export default Header

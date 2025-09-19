@@ -1,67 +1,62 @@
-import React from 'react'
-import 
-{BsCart3, BsGrid1X2Fill, BsFillArchiveFill, BsFillGrid3X3GapFill, BsPeopleFill, 
-  BsListCheck, BsMenuButtonWideFill, BsFillGearFill}
- from 'react-icons/bs'
+import { useState } from 'react';
+import Modal from 'react-modal';
+import { FiHome, FiBox, FiTag, FiLogOut } from 'react-icons/fi';
+import { Link, useLocation } from 'react-router-dom';
+import './Sidebar.css';
+import './LogoutModal.css';
 
-function Sidebar({openSidebarToggle, OpenSidebar}) {
-    const [openMenu, setOpenMenu] = React.useState(false)
+Modal.setAppElement('#root');
 
-    return (
-    <aside id="sidebar" className={openSidebarToggle ? "sidebar-responsive": ""}>
-        <div className='sidebar-title'>
-            <div className='sidebar-brand'>
-                Movelaria Ponce
-            </div>
-            <span className='icon close_icon' onClick={OpenSidebar}>X</span>
-        </div>
-        <ul className='sidebar-list'>
-            <li className='sidebar-list-item'>                    
-                <div onClick={() => window.location.href = "/"}>
-                    <BsGrid1X2Fill className='icon'/> Dashboard
-                </div>
-            </li>
-            <li className='sidebar-list-item' onClick={() => setOpenMenu(!openMenu)}>
-                <div>
-                    <BsFillArchiveFill /> Cadastros
-                </div>
-                <div className={openMenu ? 'sidebar-list-subItem' : 'hide'}>
-                    <div onClick={() => window.location.href = "/?=produtos"}>
-                        Produtos
-                    </div>
-                    <div onClick={() => window.location.href = "/?=tipoprodutos"}>
-                        Tipo de produtos
-                    </div>
-                </div>
-            </li>
-            <li className='sidebar-list-item'>
-                <a href="">
-                    <BsFillGrid3X3GapFill className='icon'/> Máquinas
-                </a>
-            </li>
-            <li className='sidebar-list-item'>
-                <a href="">
-                    <BsPeopleFill className='icon'/> Clientes
-                </a>
-            </li>
-            <li className='sidebar-list-item'>
-                <a href="">
-                    <BsListCheck className='icon'/> Inventário
-                </a>
-            </li>
-            <li className='sidebar-list-item'>
-                <a href="">
-                    <BsMenuButtonWideFill className='icon'/> Relatórios
-                </a>
-            </li>
-            <li className='sidebar-list-item'>
-                <a href="">
-                    <BsFillGearFill className='icon'/> Configurações
-                </a>
-            </li>
+export default function Sidebar({ open }) {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const location = useLocation();
+
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    window.location.href = '/';
+  };
+
+  return (
+    <aside className={`sidebar ${open ? 'open' : 'closed'}`}>
+      <nav>
+        <ul>
+          <li className={location.pathname === '/' ? 'active' : ''}>
+            <Link to="/">
+              <FiHome className="icon" />
+              Home
+            </Link>
+          </li>
+          <li className={location.pathname === '/produtos' ? 'active' : ''}>
+            <Link to="/produtos">
+              <FiBox className="icon" />
+              Produtos
+            </Link>
+          </li>
+          <li className={location.pathname === '/tipoprodutos' ? 'active' : ''}>
+            <Link to="/tipoprodutos">
+              <FiTag className="icon" />
+              Tipo de Produtos
+            </Link>
+          </li>
+          <li>
+            <button onClick={openModal}>
+              <FiLogOut className="icon" />
+              Logout
+            </button>
+          </li>
         </ul>
-    </aside>
-  )
-}
+      </nav>
 
-export default Sidebar
+      <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
+        <h2>Deseja realmente sair?</h2>
+        <div className="modal-buttons">
+          <button className="confirm" onClick={handleLogout}>Sim, sair</button>
+          <button className="cancel" onClick={closeModal}>Cancelar</button>
+        </div>
+      </Modal>
+    </aside>
+  );
+}
