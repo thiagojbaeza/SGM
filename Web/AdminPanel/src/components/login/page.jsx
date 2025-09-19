@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { login } from '../../services/auth';
 import './login.css';
 
 export default function Login() {
@@ -6,13 +7,18 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (username === 'admin' && password === '12345') {
-      localStorage.setItem('isAuthenticated', 'true');
-      window.location.href = '/';
-    } else {
-      setError('Usuário ou senha inválidos');
+    try {
+      const data = await login({ username, password });
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+        window.location.href = '/';
+      } else {
+        setError('Credenciais inválidas');
+      }
+    } catch {
+      setError('Erro ao conectar com o servidor');
     }
   };
 

@@ -9,7 +9,8 @@ const api = fastify({
 
 const controller = new LoginController();
 
-api.post('/login', async function (request, response) {
+api.get('/:id', async function (request, response) {
+    const { id } = request.params as { id: string };
     const usuario = request.headers["usuario"] as string;
     const senha = request.headers["senha"] as string;
     const data = await controller.login(usuario, senha);
@@ -26,41 +27,6 @@ api.post('/createLogin', async function (request, response) {
         response.send({ result:"Houve um problema ao inserir o registro!"});
     }
 });
-
-
-/* api.get('/:id', async function (request, response) {
-    const { id } = request.params as { id: string };
-    var data = await controller.getUserById(id);    
-    response.send({ result: data.length ? data: "Id nao encontrado! verifique infos."});
-});
-
-api.post('/', async function (request, response) {
-    var body = request.body as IUser;
-    var data = await controller.addUser(body);    
-    response.send({ result:"Registro inserido com sucesso!"});
-});
-
-api.put('/', async function (request, response) {
-    var body = request.body as IUser;
-    var data = await controller.updateUser(body);    
-    response.send({ result:"Registro alterado com sucesso!"});
-});
-
-api.delete('/:id', async function (request, response) {
-    const { id } = request.params as { id: string };
-    var data = await controller.deleteUser(id);    
-    response.send({ result:"Registro deletado com sucesso!"});
-});
- */
-
-
-
-
-/* api.get('/', async function (request, response) {
-    const token = request.headers["token"] as string;
-    const data = await controller.getUser(token);    
-    response.send({ result: data});
-}); */
 
 const start = async () => {
     try {
