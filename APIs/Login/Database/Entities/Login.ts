@@ -19,13 +19,8 @@ export class LoginDAO{
     constructor(){
         this.db = new Db();
     }
-     public async getLogin(ds_nome_usuario: string, ds_senha: string, id_usuario?: string){
-        let sql = "SELECT ds_nome_usuario, ds_senha FROM tb_login WHERE fg_ativo = 1 and ds_nome_usuario =? and ds_senha=? ";
-        
-        if(id_usuario){
-            sql += " AND id_usuario = ?";
-        }
-        
+     public async getLogin(ds_nome_usuario: string, ds_senha: string){
+        const sql = "SELECT ds_nome_usuario, ds_senha FROM tb_login WHERE fg_ativo = 1 and ds_nome_usuario =? and ds_senha=? ";
         const result = await this.db.query(sql, [ds_nome_usuario, ds_senha]);
         return result as ILogin[];
     } 

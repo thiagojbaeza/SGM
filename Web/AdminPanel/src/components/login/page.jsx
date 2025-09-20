@@ -1,32 +1,29 @@
 import { useState } from 'react';
-import { login } from '../../services/auth';
 import './login.css';
+import loginService from '../../services/login';
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const data = await login({ username, password });
-      if (data.token) {
-        localStorage.setItem('token', data.token);
-        window.location.href = '/';
-      } else {
-        setError('Credenciais inválidas');
-      }
-    } catch {
-      setError('Erro ao conectar com o servidor');
-    }
+  const handleLogin = async () => {
+    const service = new loginService()
+    const data = await service.getLogin(username, password)
+
+    if (data.result.success) {
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('token', data.result.token);
+      window.location.reload();
+    } else {
+      setError('Usuário ou senha inválidos');
+    } 
   };
 
   return (
     <div className="login-container">
       <div className="login-box">
-        <h2>Login</h2>
-        <form onSubmit={handleLogin}>
+        <h2>Bem vindo ao SGM</h2>
           <input
             type="text"
             placeholder="Usuário"
@@ -39,8 +36,12 @@ export default function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button type="submit">Entrar</button>
-        </form>
+          <button type="submit" 
+            onClick={()=> handleLogin()}
+            disabled={(username.length <3) || (password.length <3)}
+          >
+            Entrar
+          </button>
         {error && <p>{error}</p>}
       </div>
     </div>

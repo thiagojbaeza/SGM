@@ -15,8 +15,8 @@ export default function Sidebar({ open }) {
   const closeModal = () => setModalIsOpen(false);
 
   const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    window.location.href = '/';
+    localStorage.clear();
+    window.location.href ='/'
   };
 
   return (
