@@ -14,12 +14,14 @@ await api.register(cors, {
 
 const controller = new LoginController();
 
+// verifica se o usuario existe e efetua o login, gera o token para acesso ao sistema
 api.post('/login', async function (request, response) {
     const body = request.body as {ds_login: string, ds_senha: string}
     const data = await controller.login(body.ds_login, body.ds_senha);
     response.send({ result: data});
 });
 
+// cria um novo usuario para acesso ao sistema
 api.post('/createLogin', async function (request, response) {
     const body = request.body as ILogin;
     const token = request.headers["token"] as string;
@@ -31,40 +33,46 @@ api.post('/createLogin', async function (request, response) {
     }
 });
 
-
-/* api.get('/:id', async function (request, response) {
+//utilizado para pegar todos os usuários ou somente um
+api.get('/login/:id', async function (request, response) {
     const { id } = request.params as { id: string };
-    var data = await controller.getUserById(id);    
-    response.send({ result: data.length ? data: "Id nao encontrado! verifique infos."});
-});
-
-api.post('/', async function (request, response) {
-    var body = request.body as IUser;
-    var data = await controller.addUser(body);    
-    response.send({ result:"Registro inserido com sucesso!"});
-});
-
-api.put('/', async function (request, response) {
-    var body = request.body as IUser;
-    var data = await controller.updateUser(body);    
-    response.send({ result:"Registro alterado com sucesso!"});
-});
-
-api.delete('/:id', async function (request, response) {
-    const { id } = request.params as { id: string };
-    var data = await controller.deleteUser(id);    
-    response.send({ result:"Registro deletado com sucesso!"});
-});
- */
-
-
-
-
-/* api.get('/', async function (request, response) {
     const token = request.headers["token"] as string;
-    const data = await controller.getUser(token);    
-    response.send({ result: data});
-}); */
+    const data = await controller.getLogins(token, id);    
+    if(data.success ===true){
+        response.send({result: data.payload, success: true})
+    }else if (data.payload.length === 0) {
+        response.send({result:"Usuário não encontrado!", success:false});
+    } else{
+        response.send({result:"Token inválido!", success:false});
+    }
+      
+});
+
+//utilizado para alterar os dados do usuário
+api.put('/login/:id', async function (request, response) {
+    const body = request.body as ILogin;
+    const { id } = request.params as { id: string };
+    const token = request.headers["token"] as string;
+    const data = await controller.updateLogin(token,body,id);
+    if(data.success){
+        response.send({ result:"Registro alterado com sucesso!", success:true}); 
+    } else{
+        response.send({ result: data.payload, success:false}); 
+    }   
+});
+
+//utilizado para inativar um usuário
+api.delete('/login/:id', async function (request, response) {
+    const body = request.body as ILogin;
+    const { id } = request.params as { id: string };
+    const token = request.headers["token"] as string;
+    const data = await controller.deleteLogin(token,body,id);
+    if(data.success){
+        response.send({ result:"Registro deletado com sucesso!", success:true}); 
+    } else{
+        response.send({ result: data.payload, success:false}); 
+    }   
+});
 
 const start = async () => {
     try {

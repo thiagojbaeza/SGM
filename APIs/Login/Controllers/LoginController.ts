@@ -1,8 +1,6 @@
 import { LoginDAO, type ILogin } from "../Database/Entities/Login.ts";
 import { Token } from "../Utils/token.ts";
 
-
-
 export class LoginController{
     private loginEntity = new LoginDAO();
     private token = new Token(); 
@@ -26,35 +24,41 @@ export class LoginController{
         }
     }
 
-
-/*     public async getUser(token: string){
+    public async getLogins(token: string, id?: string){
         if(this.token.validateToken(token)){
-            const result = await this.entity.getUser();
+            const result = await this.loginEntity.getLogins(id);
+            if(result.length ===0){
+                return {payload: result, success: false}
+            }
             return {payload: result, success: true};
         }else{
-            return {payload: null, success: false};
+            return {payload: "Token inválido!", success: false};
         }
     }
 
-    public async getUserById(id_user:string){
-        const result = await this.entity.getUserById(id_user);
-        return result;
+    public async updateLogin(token: string, login:ILogin, idUsuarioLogado: string){
+        if(this.token.validateToken(token)){
+            const result = await this.loginEntity.updateLogin(token, login, idUsuarioLogado);
+            if(result){
+                return {payload: result, success: true}
+            }
+            return {payload: result};
+        }else{
+            return {payload: "Token inválido!", success: false};
+        }
     }
 
-    public async addUser(user:IUser){
-        const result = await this.entity.addUser(user);
-        return result;
+    public async deleteLogin(token: string, login:ILogin, idUsuarioLogado: string){
+        if(this.token.validateToken(token)){
+            const result = await this.loginEntity.deleteLogin(token, login, idUsuarioLogado);
+            if(result){
+                return {payload: result, success: true}
+            }
+            return {payload: result};
+        }else{
+            return {payload: "Token inválido!", success: false};
+        }
     }
-
-    public async updateUser(user:IUser){
-        const result = await this.entity.updateUser(user);
-        return result;
-    }
-
-    public async deleteUser(id_user: string){
-        const result = await this.entity.deleteUser(id_user);
-        return result;
-    } */
 }
 
 
