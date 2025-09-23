@@ -1,28 +1,48 @@
+/* Lista de usuários mode */
 .adicionar-container {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 16px;
 }
-
 .adicionar-btn {
-  display: flex;
-  align-items: center;
   background-color: #007bff;
   color: #fff;
   padding: 10px 18px;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color .3s ease;
+  transition: background-color 0.3s ease;
 }
-
 .adicionar-btn:hover {
   background-color: #0056b3;
 }
 
-/* Opcional: mensagem de erro */
+/* Form mode */
+.form-container {
+  position: relative;
+  padding-top: 48px; /* Espaço para o botão Voltar */
+}
+.back-btn-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
 .error-msg {
-  margin-top: 12px;
+  margin-top: 16px;
   color: red;
 }
