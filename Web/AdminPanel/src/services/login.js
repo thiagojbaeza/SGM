@@ -11,9 +11,4 @@ export default class loginService extends Rest {
         const result = await this.api.get(endpoint,null, {headers: { token }});
         return result.data;
     }
-
-    async updateUsuario(token, user, password, type, active) {
-        const result = await this.api.post('/login', {'ds_login':user, 'ds_senha': password,'id_tipo_usuario':type, 'fg_ativo': active}, {headers: {token}})
-        return result.data
-    }   
 }

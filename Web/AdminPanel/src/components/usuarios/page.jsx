@@ -12,48 +12,30 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import loginService from '../../services/login';
-import tipoUsuarioService from '../../services/tipoUsuario';
 import './usuarios.css';
 
 export default function UsuariosPage() {
   const [rows, setRows] = useState([]);
-  const [tipoUsuarios, setTipoUsuarios] = useState([]);
-  const [tipoUsuarioMap, setTipoUsuarioMap] = useState({});
   const [mode, setMode] = useState('view');
   const [currentUser, setCurrentUser] = useState({
     id_usuario: null,
     ds_nome_usuario: '',
     ds_senha: '',
-    fg_ativo: 1,
     id_tipo_usuario: '',
+    fg_ativo: 1,
   });
   const [error, setError] = useState(null);
 
   useEffect(() => {
     (async () => {
       try {
+        const service = new loginService();
         const token = localStorage.getItem('token');
-        const login = new loginService();
-        const tipoService = new tipoUsuarioService();
-
-        const usuariosRes = await login.getUsuarios(token);
-        const tiposRes = await tipoService.getTipoUsuario(token);
-
-        if (usuariosRes.success) {
-          setRows(usuariosRes.result);
+        const data = await service.getUsuarios(token);
+        if (data.success) {
+          setRows(data.result);
         } else {
           setError('Falha ao carregar usuários');
-        }
-
-        if (tiposRes.success) {
-          setTipoUsuarios(tiposRes.result);
-          const map = {};
-          tiposRes.result.forEach((tipo) => {
-            map[tipo.id_tipo_usuario] = tipo.ds_tipo_usuario;
-          });
-          setTipoUsuarioMap(map);
-        } else {
-          setError('Falha ao carregar tipos de usuário');
         }
       } catch {
         setError('Erro de rede');
@@ -66,8 +48,8 @@ export default function UsuariosPage() {
       id_usuario: null,
       ds_nome_usuario: '',
       ds_senha: '',
-      fg_ativo: 1,
       id_tipo_usuario: '',
+      fg_ativo: 1,
     });
     setMode('form');
   }
@@ -84,16 +66,16 @@ export default function UsuariosPage() {
   async function handleSaveClick(e) {
     e.preventDefault();
     try {
+      const service = new loginService();
       const token = localStorage.getItem('token');
-      const login = new loginService();
 
       if (currentUser.id_usuario) {
-        await login.updateUsuario(token, currentUser);
+        await service.updateUsuario(token, currentUser);
       } else {
-        await login.createUsuario(token, currentUser);
+        await service.createUsuario(token, currentUser);
       }
 
-      const data = await login.getUsuarios(token);
+      const data = await service.getUsuarios(token);
       if (data.success) {
         setRows(data.result);
       }
@@ -106,11 +88,11 @@ export default function UsuariosPage() {
   async function handleDeleteClick() {
     if (!currentUser.id_usuario) return;
     try {
+      const service = new loginService();
       const token = localStorage.getItem('token');
-      const login = new loginService();
-      await login.deleteUsuario(token, currentUser.id_usuario);
+      await service.deleteUsuario(token, currentUser.id_usuario);
 
-      const data = await login.getUsuarios(token);
+      const data = await service.getUsuarios(token);
       if (data.success) {
         setRows(data.result);
       }
@@ -128,7 +110,6 @@ export default function UsuariosPage() {
       field: 'id_tipo_usuario',
       headerName: 'Tipo Usuário',
       width: 150,
-      valueFormatter: (params) => tipoUsuarioMap[params.value] || 'Desconhecido',
     },
     {
       field: 'fg_ativo',
@@ -213,11 +194,8 @@ export default function UsuariosPage() {
                 }
                 required
               >
-                {tipoUsuarios.map((tipo) => (
-                  <MenuItem key={tipo.id_tipo_usuario} value={tipo.id_tipo_usuario}>
-                    {tipo.ds_tipo_usuario}
-                  </MenuItem>
-                ))}
+                <MenuItem value={1}>Administrador</MenuItem>
+                <MenuItem value={2}>Comum</MenuItem>
               </Select>
             </FormControl>
 
@@ -234,7 +212,6 @@ export default function UsuariosPage() {
                 />
               }
               label="Ativo"
-              sx={{ mt: 2 }}
             />
 
             <div className="form-buttons">
