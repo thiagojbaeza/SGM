@@ -6,15 +6,9 @@ export default class loginService extends Rest {
         return result.data
     }
 
-/*     async getUsuarios(token, id) {
-        const endpoint = id ? `/login/${id}` : '/login/';
-        const result = await this.api.get(endpoint,{},{headers:{token}});
-        return result.data;
-    } */
-
     async getUsuarios(token, id) {
-    const endpoint = id ? `/login/${id}` : '/login/';
-    const result = await this.api.get(endpoint,null, {headers: { token }});
-    return result.data;
+        const endpoint = id ? `/login/${id}` : '/login/';
+        const result = await this.api.get(endpoint,null, {headers: { token }});
+        return result.data;
     }
 }
