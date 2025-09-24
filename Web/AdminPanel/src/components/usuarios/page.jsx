@@ -12,7 +12,10 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import loginService from '../../services/login';
+import tipousuarioService from '../../services/tipousuario';
+
 import './usuarios.css';
+import { isPasteShortcut } from '@mui/x-data-grid/internals';
 
 export default function UsuariosPage() {
   const [rows, setRows] = useState([]);
@@ -21,17 +24,26 @@ export default function UsuariosPage() {
     id_usuario: null,
     ds_nome_usuario: '',
     ds_senha: '',
-    id_tipo_usuario: '',
+    id_tipo_usuario: null,
     fg_ativo: 1,
   });
   const [error, setError] = useState(null);
+  const [tipoUsuario, setTipoUsuario] = useState(null);
 
   useEffect(() => {
     (async () => {
       try {
         const service = new loginService();
         const token = localStorage.getItem('token');
+        const serviceTipoUsuario = new tipousuarioService();
+        const dataTipoUsuario = await serviceTipoUsuario.getTipoUsuario(token);
+
+        if(dataTipoUsuario.success){
+          setTipoUsuario(dataTipoUsuario.result);
+        }
+        
         const data = await service.getUsuarios(token);
+        
         if (data.success) {
           setRows(data.result);
         } else {
@@ -48,7 +60,7 @@ export default function UsuariosPage() {
       id_usuario: null,
       ds_nome_usuario: '',
       ds_senha: '',
-      id_tipo_usuario: '',
+      id_tipo_usuario: null,
       fg_ativo: 1,
     });
     setMode('form');
@@ -85,29 +97,12 @@ export default function UsuariosPage() {
     }
   }
 
-  async function handleDeleteClick() {
-    if (!currentUser.id_usuario) return;
-    try {
-      const service = new loginService();
-      const token = localStorage.getItem('token');
-      await service.deleteUsuario(token, currentUser.id_usuario);
-
-      const data = await service.getUsuarios(token);
-      if (data.success) {
-        setRows(data.result);
-      }
-      setMode('view');
-    } catch {
-      setError('Erro ao deletar usuário');
-    }
-  }
-
   const columns = [
     { field: 'id_usuario', headerName: 'ID', width: 70 },
     { field: 'ds_nome_usuario', headerName: 'Usuário', width: 300 },
     { field: 'ds_senha', headerName: 'Senha', width: 130 },
     {
-      field: 'id_tipo_usuario',
+      field: 'ds_tipo_usuario',
       headerName: 'Tipo Usuário',
       width: 150,
     },
@@ -124,7 +119,7 @@ export default function UsuariosPage() {
     },
     {
       field: 'editar',
-      headerName: 'EDITAR',
+      headerName: 'Ações',
       width: 130,
       renderCell: (params) => (
         <Button onClick={() => handleEditClick(params.row)}>
@@ -186,7 +181,6 @@ export default function UsuariosPage() {
             <FormControl fullWidth sx={{ mt: 2 }}>
               <InputLabel id="tipo-usuario-label">Tipo de Usuário</InputLabel>
               <Select
-                labelId="tipo-usuario-label"
                 value={currentUser.id_tipo_usuario}
                 label="Tipo de Usuário"
                 onChange={(e) =>
@@ -194,8 +188,11 @@ export default function UsuariosPage() {
                 }
                 required
               >
-                <MenuItem value={1}>Administrador</MenuItem>
-                <MenuItem value={2}>Comum</MenuItem>
+                {
+                  tipoUsuario?.map((item) =>(
+                    <MenuItem value={item.id_tipo_usuario}>{item.ds_tipo_usuario}</MenuItem>
+                  ))
+                }
               </Select>
             </FormControl>
 
@@ -215,24 +212,9 @@ export default function UsuariosPage() {
             />
 
             <div className="form-buttons">
-              {currentUser.id_usuario && (
-                <Button
-                  variant="contained"
-                  sx={{
-                    backgroundColor: '#FFA500',
-                    '&:hover': { backgroundColor: '#FF8C00' },
-                  }}
-                  onClick={handleSaveClick}
+              <Button type="submit" variant="contained"
+                onClick={handleSaveClick}
                 >
-                  Alterar
-                </Button>
-              )}
-              {currentUser.id_usuario && (
-                <Button variant="contained" color="error" onClick={handleDeleteClick}>
-                  Deletar
-                </Button>
-              )}
-              <Button type="submit" variant="contained">
                 Salvar
               </Button>
             </div>

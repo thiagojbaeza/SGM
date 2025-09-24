@@ -1,10 +1,15 @@
 import fastify from 'fastify';
-import { TipoUsuarioController } from './Controllers/TipoUsuarioController.ts';
-import type { ITipoUsuario } from './Database/Entities/TipoUsuario.ts';
+import { TipoUsuarioController } from './Controllers/TipoUsuarioController.js';
+import type { ITipoUsuario } from './Database/Entities/TipoUsuario.js';
+import cors from '@fastify/cors';
 
 const api = fastify({
     logger: true
 });
+
+await api.register(cors, {
+    origin:'*'
+})
 
 const controller = new TipoUsuarioController();
 
@@ -46,7 +51,7 @@ api.delete('/:id', async function (request, response) {
 
 const start = async () => {
     try {
-        await api.listen({port: 3000})
+        await api.listen({ port: 3001, host: '0.0.0.0' })
     }catch(err){
         api.log.error(err)
         process.exit(1)

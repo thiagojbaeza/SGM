@@ -1,4 +1,4 @@
-import { Db } from "../Db.ts";
+import { Db } from "../Db.js";
 
 export interface ITipoUsuario{
     id_tipo_usuario?: number;

@@ -1,5 +1,5 @@
-import { TipoUsuarioDAO, type ITipoUsuario } from "../Database/Entities/TipoUsuario.ts";
-import { Token } from "../Utils/token.ts";
+import { TipoUsuarioDAO, type ITipoUsuario } from "../Database/Entities/TipoUsuario.js";
+import { Token } from "../Utils/token.js";
 
 
 

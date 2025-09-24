@@ -10,6 +10,7 @@ export interface ILogin{
     id_usuario_criacao: number; 
     dt_ultima_alteracao?: string; 
     id_usuario_ultima_alteracao?: number;
+    ds_tipo_usuario?: string;
 }
 
 export class LoginDAO{
@@ -25,10 +26,10 @@ export class LoginDAO{
     }
     
     public async getLogins(id_usuario?: string){
-        let sql = "SELECT id_usuario, ds_nome_usuario, ds_senha, fg_ativo FROM tb_login ";
+        let sql = "select l.id_usuario, l.ds_nome_usuario, l.ds_senha, l.id_tipo_usuario, t.ds_tipo_usuario , l.fg_ativo from tb_login l, tb_tipo_usuario t WHERE l.id_tipo_usuario  = t.id_tipo_usuario ";
         
         if(id_usuario){
-            sql += " WHERE id_usuario = ?";
+            sql += " AND l.id_usuario = ?";
         }
         
         const result = await this.db.query(sql, [id_usuario]);
