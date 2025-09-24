@@ -1,6 +1,6 @@
 import fastify from 'fastify';
-import { LoginController } from './Controllers/LoginController.ts';
-import type { ILogin } from './Database/Entities/Login.ts';
+import { LoginController } from './Controllers/LoginController.js';
+import type { ILogin } from './Database/Entities/Login.js';
 import cors from '@fastify/cors';
 
 
@@ -76,7 +76,8 @@ api.delete('/login/:id', async function (request, response) {
 
 const start = async () => {
     try {
-        await api.listen({port: 3000})
+        //await api.listen({port: 3000})
+        await api.listen({ port: 3000, host: '0.0.0.0' })
     }catch(err){
         api.log.error(err)
         process.exit(1)

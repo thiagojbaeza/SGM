@@ -1,5 +1,5 @@
-import { LoginDAO, type ILogin } from "../Database/Entities/Login.ts";
-import { Token } from "../Utils/token.ts";
+import { LoginDAO, type ILogin } from "../Database/Entities/Login.js";
+import { Token } from "../Utils/token.js";
 
 export class LoginController{
     private loginEntity = new LoginDAO();

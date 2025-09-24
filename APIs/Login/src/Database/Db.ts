@@ -9,7 +9,7 @@ export class Db {
 
     private async createConnection(){
         this.connection =  await mysql.createConnection({
-        host: 'localhost',
+        host: 'host.docker.internal',
         user: 'sgm2',
         database: 'sgm',
         password: 'Thi@go05',
