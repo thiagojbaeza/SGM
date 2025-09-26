@@ -32,6 +32,18 @@
   }
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.welcome-text {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  white-space: nowrap;
+}
+
 .switch {
   position: relative;
   display: inline-block;
