@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  app:
+    build: . # Construa a imagem do app a partir do Dockerfile local
+    container_name: sgm
+    ports:
+      - "3000:3000"

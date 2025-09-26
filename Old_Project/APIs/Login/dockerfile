@@ -1,0 +1,36 @@
+# Etapa 1: Build da aplicação
+FROM node:18-alpine AS builder
+
+# Diretório de trabalho
+WORKDIR /app
+
+# Copia os arquivos de dependência
+COPY package*.json ./
+
+# Instala as dependências
+RUN npm install
+
+# Copia o restante dos arquivos
+COPY . .
+
+# Compila o TypeScript para JavaScript
+RUN npm run build
+
+# Etapa 2: Deploy da aplicação
+FROM node:18-alpine
+
+# Diretório de trabalho
+WORKDIR /app
+
+# Copia apenas os arquivos necessários do build
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/dist ./dist
+
+# Instala apenas as dependências de produção
+RUN npm install --only=production
+
+# Expõe a porta (ajuste conforme sua aplicação)
+EXPOSE 3000
+
+# Comando para iniciar a aplicação
+CMD ["node", "dist/App.js"]
