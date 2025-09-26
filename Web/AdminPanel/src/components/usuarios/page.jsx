@@ -11,6 +11,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 import loginService from '../../services/login';
 import tipousuarioService from '../../services/tipousuario';
 
@@ -28,6 +31,8 @@ export default function UsuariosPage() {
   });
   const [error, setError] = useState(null);
   const [tipoUsuario, setTipoUsuario] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -93,14 +98,18 @@ export default function UsuariosPage() {
 
       if (currentUser.id_usuario) {
         await service.updateUsuario(payload, token, currentUser.id_usuario);
+        setSuccessMessage('Registro alterado com sucesso!');
       } else {
         await service.createUsuario(payload, token);
+        setSuccessMessage('Registro incluído com sucesso!');
       }
 
       const data = await service.getUsuarios(token);
       if (data.success) {
         setRows(data.result);
       }
+
+      setOpenSnackbar(true);
       setMode('view');
     } catch (err) {
       console.error('Erro ao salvar usuário:', err);
@@ -232,6 +241,29 @@ export default function UsuariosPage() {
       )}
 
       {error && <p className="error-msg">{error}</p>}
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={4000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <MuiAlert
+          onClose={() => setOpenSnackbar(false)}
+          severity="success"
+          sx={{
+            width: '100%',
+            background: 'linear-gradient(to right, #4caf50, #81c784)',
+            color: '#fff',
+            fontWeight: 'bold',
+            boxShadow: '0 3px 6px rgba(0,0,0,0.2)',
+          }}
+          elevation={6}
+          variant="filled"
+        >
+          {successMessage}
+        </MuiAlert>
+      </Snackbar>
     </Paper>
   );
 }
