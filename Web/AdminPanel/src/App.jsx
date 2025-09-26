@@ -6,6 +6,7 @@ import Produtos from './components/produtos/page';
 import TipoProdutos from './components/tipoprodutos/page';
 import Login from './components/login/page';
 import Usuarios from './components/usuarios/page.jsx';
+import Maquina from './components/maquina/page.jsx'
 
 const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 //colocar a funcao para validar o token, caso negativo efetuar o logout e lipar o cache
@@ -50,7 +51,9 @@ function App() {
             <Route index element={<Home />} />
             <Route path="produtos" element={<Produtos />} />
             <Route path="tipoprodutos" element={<TipoProdutos />} />
-             <Route path="usuarios" element={<Usuarios />} />
+            <Route path="usuarios" element={<Usuarios />} />
+            <Route path="maquina" element={<Maquina />} />
+
           </Route>
         )}
       </Routes>

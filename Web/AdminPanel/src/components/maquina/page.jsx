@@ -14,43 +14,38 @@ import FormControl from '@mui/material/FormControl';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
-import loginService from '../../services/login';
-import tipousuarioService from '../../services/tipousuario';
+import maquinaService from '../../services/maquina';
 
-import './usuarios.css';
 
-export default function UsuariosPage() {
+import './Maquina.css';
+
+export default function MaquinasPage() {
   const [rows, setRows] = useState([]);
   const [mode, setMode] = useState('view');
-  const [currentUser, setCurrentUser] = useState({
-    id_usuario: null,
-    ds_nome_usuario: '',
-    ds_senha: '',
-    id_tipo_usuario: null,
-    fg_ativo: 1,
+  const [currentData, setCurrentData] = useState({
+    id_maquina: null,
+    cd_maquina: '',
+    ds_nome_maquina: '',
+    nr_disponibilidade_maquina: null ,
+    nr_parada_programada: null,
+    nr_parada_nao_programada: null ,
+    fg_ativo: 1 ,
   });
   const [error, setError] = useState(null);
-  const [tipoUsuario, setTipoUsuario] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
-        const service = new loginService();
+        const service = new maquinaService();
         const token = localStorage.getItem('token');
-        const serviceTipoUsuario = new tipousuarioService();
-        const dataTipoUsuario = await serviceTipoUsuario.getTipoUsuario(token);
+        const data = await service.getMaquinas(token);
 
-        if (dataTipoUsuario.success) {
-          setTipoUsuario(dataTipoUsuario.result);
-        }
-
-        const data = await service.getUsuarios(token);
         if (data.success) {
           setRows(data.result);
         } else {
-          setError('Falha ao carregar usuários');
+          setError('Falha ao carregar as máquinas');
         }
       } catch {
         setError('Erro de rede');
@@ -59,18 +54,20 @@ export default function UsuariosPage() {
   }, []);
 
   function handleAddClick() {
-    setCurrentUser({
-      id_usuario: null,
-      ds_nome_usuario: '',
-      ds_senha: '',
-      id_tipo_usuario: null,
-      fg_ativo: 1,
+    setCurrentData({
+        id_maquina: null,
+        cd_maquina: '',
+        ds_nome_maquina: '',
+        nr_disponibilidade_maquina: null ,
+        nr_parada_programada: null,
+        nr_parada_nao_programada: null ,
+        fg_ativo: 1 ,
     });
     setMode('form');
   }
 
   function handleEditClick(row) {
-    setCurrentUser({ ...row });
+    setCurrentData({ ...row });
     setMode('form');
   }
 
@@ -83,28 +80,30 @@ export default function UsuariosPage() {
     setError(null);
 
     try {
-      const service = new loginService();
+      const service = new maquinaService();
       const token = localStorage.getItem('token');
-      const idUser = 1;
+      const idUser = localStorage.getItem('idUser');
 
       const payload = {
-        ds_nome_usuario: currentUser.ds_nome_usuario,
-        ds_senha: currentUser.ds_senha,
-        fg_ativo: currentUser.fg_ativo,
-        id_tipo_usuario: currentUser.id_tipo_usuario,
+        cd_maquina: currentData.cd_maquina,
+        ds_nome_maquina: currentData.ds_nome_maquina,
+        nr_disponibilidade_maquina: currentData.nr_disponibilidade_maquina,
+        nr_parada_programada: currentData.nr_parada_programada,
+        nr_parada_nao_programada:  currentData.nr_parada_nao_programada,
+        fg_ativo: currentData.fg_ativo,
         id_usuario_criacao: idUser,
         id_usuario_ultima_alteracao: idUser
       };
 
-      if (currentUser.id_usuario) {
-        await service.updateUsuario(payload, token, currentUser.id_usuario);
+      if (currentData.id_maquina) {
+        await service.updateMaquina(payload, token, currentData.id_maquina);
         setSuccessMessage('Registro alterado com sucesso!');
       } else {
-        await service.createUsuario(payload, token);
+        await service.createMaquina(payload, token);
         setSuccessMessage('Registro incluído com sucesso!');
       }
 
-      const data = await service.getUsuarios(token);
+      const data = await service.getMaquinas(token);
       if (data.success) {
         setRows(data.result);
       }
@@ -112,24 +111,23 @@ export default function UsuariosPage() {
       setOpenSnackbar(true);
       setMode('view');
     } catch (err) {
-      console.error('Erro ao salvar usuário:', err);
-      setError('Erro ao salvar usuário');
+      console.error('Erro ao salvar a máquina:', err);
+      setError('Erro ao salvar a máquina');
     }
   }
 
   const columns = [
-    { field: 'id_usuario', headerName: 'ID', width: 70 },
-    { field: 'ds_nome_usuario', headerName: 'Usuário', width: 300 },
-    { field: 'ds_senha', headerName: 'Senha', width: 130 },
-    {
-      field: 'ds_tipo_usuario',
-      headerName: 'Tipo Usuário',
-      width: 150,
-    },
+    { field: 'id_maquina', headerName: 'ID', width: 70 },
+    { field: 'cd_maquina', headerName: 'Cod', width: 130},
+    { field: 'ds_nome_maquina', headerName: 'Máquina', width: 250 },
+    { field: 'nr_disponibilidade_maquina', headerName: 'Disponibilidade', width: 130 },
+    { field: 'nr_parada_programada', headerName: 'Parada Prog', width: 130 },
+    { field: 'nr_parada_nao_programada', headerName: 'Parada ñ Prog ', width: 130 },
+
     {
       field: 'fg_ativo',
       headerName: 'Ativo',
-      width: 130,
+      width: 90,
       renderCell: (params) =>
         params.value === 1 ? (
           <span style={{ color: 'green' }}>Ativo</span>
@@ -165,7 +163,7 @@ export default function UsuariosPage() {
             pageSizeOptions={[5, 10]}
             checkboxSelection
             disableMultipleRowSelection
-            getRowId={(row) => row.id_usuario}
+            getRowId={(row) => row.id_maquina}
             sx={{ border: 0 }}
           />
         </>
@@ -181,48 +179,53 @@ export default function UsuariosPage() {
 
           <form className="user-form" onSubmit={handleSaveClick}>
             <TextField
-              label="Usuário"
-              value={currentUser.ds_nome_usuario}
+              label="Cod Maquina"
+              value={currentData.cd_maquina}
               onChange={(e) =>
-                setCurrentUser({ ...currentUser, ds_nome_usuario: e.target.value })
+                setCurrentData({ ...currentData, cd_maquina: e.target.value })
               }
               required
             />
             <TextField
-              label="Senha"
-              type="password"
-              value={currentUser.ds_senha}
+              label="Máquina"
+              value={currentData.ds_nome_maquina}
               onChange={(e) =>
-                setCurrentUser({ ...currentUser, ds_senha: e.target.value })
+                setCurrentData({ ...currentData, ds_nome_maquina: e.target.value })
+              }
+              required
+            />
+            <TextField
+              label="Disponibilidade em Hrs"
+              value={currentData.nr_disponibilidade_maquina}
+              onChange={(e) =>
+                setCurrentData({ ...currentData, nr_disponibilidade_maquina: e.target.value })
+              }
+              required
+            />
+            <TextField
+              label="Parada Prog em Hrs"
+              value={currentData.nr_parada_programada}
+              onChange={(e) =>
+                setCurrentData({ ...currentData, nr_parada_programada: e.target.value })
+              }
+              required
+            />
+            <TextField
+              label="Parada não Prog em Hrs"
+              value={currentData.nr_parada_nao_programada}
+              onChange={(e) =>
+                setCurrentData({ ...currentData, nr_parada_nao_programada: e.target.value })
               }
               required
             />
 
-            <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel id="tipo-usuario-label">Tipo de Usuário</InputLabel>
-              <Select
-                value={currentUser.id_tipo_usuario}
-                label="Tipo de Usuário"
-                onChange={(e) =>
-                  setCurrentUser({ ...currentUser, id_tipo_usuario: e.target.value })
-                }
-                required
-              >
-                {tipoUsuario?.map((item) => (
-                  <MenuItem key={item.id_tipo_usuario} value={item.id_tipo_usuario}>
-                    {item.ds_tipo_usuario}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
             <FormControlLabel
               control={
                 <Switch
-                  checked={currentUser.fg_ativo === 1}
+                  checked={currentData.fg_ativo === 1}
                   onChange={(e) =>
-                    setCurrentUser({
-                      ...currentUser,
+                    setCurrentData({
+                      ...currentData,
                       fg_ativo: e.target.checked ? 1 : 0,
                     })
                   }
