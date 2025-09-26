@@ -15,7 +15,6 @@ import loginService from '../../services/login';
 import tipousuarioService from '../../services/tipousuario';
 
 import './usuarios.css';
-import { isPasteShortcut } from '@mui/x-data-grid/internals';
 
 export default function UsuariosPage() {
   const [rows, setRows] = useState([]);
@@ -38,12 +37,11 @@ export default function UsuariosPage() {
         const serviceTipoUsuario = new tipousuarioService();
         const dataTipoUsuario = await serviceTipoUsuario.getTipoUsuario(token);
 
-        if(dataTipoUsuario.success){
+        if (dataTipoUsuario.success) {
           setTipoUsuario(dataTipoUsuario.result);
         }
-        
+
         const data = await service.getUsuarios(token);
-        
         if (data.success) {
           setRows(data.result);
         } else {
@@ -80,11 +78,36 @@ export default function UsuariosPage() {
     try {
       const service = new loginService();
       const token = localStorage.getItem('token');
+      const idUser = 1;
 
       if (currentUser.id_usuario) {
-        await service.updateUsuario(token, currentUser);
+        await service.updateUsuario(
+          currentUser.ds_nome_usuario,
+          currentUser.ds_senha,
+          currentUser.fg_ativo,
+          currentUser.id_tipo_usuario,
+          idUser,
+          token,
+          currentUser.id_usuario
+        );
+
+console.log('Payload PUT:', {
+  ds_nome_usuario: currentUser.ds_nome_usuario,
+  ds_senha: currentUser.ds_senha,
+  fg_ativo: currentUser.fg_ativo,
+  id_tipo_usuario: currentUser.id_tipo_usuario,
+  id_usuario_ultima_alteracao: idUser
+});
+
+
       } else {
-        await service.createUsuario(token, currentUser);
+        await service.createUsuario(token, {
+          ds_nome_usuario: currentUser.ds_nome_usuario,
+          ds_senha: currentUser.ds_senha,
+          fg_ativo: currentUser.fg_ativo,
+          id_tipo_usuario: currentUser.id_tipo_usuario,
+          id_usuario_criacao: idUser
+        });
       }
 
       const data = await service.getUsuarios(token);
@@ -188,11 +211,11 @@ export default function UsuariosPage() {
                 }
                 required
               >
-                {
-                  tipoUsuario?.map((item) =>(
-                    <MenuItem value={item.id_tipo_usuario}>{item.ds_tipo_usuario}</MenuItem>
-                  ))
-                }
+                {tipoUsuario?.map((item) => (
+                  <MenuItem key={item.id_tipo_usuario} value={item.id_tipo_usuario}>
+                    {item.ds_tipo_usuario}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
 
@@ -212,9 +235,7 @@ export default function UsuariosPage() {
             />
 
             <div className="form-buttons">
-              <Button type="submit" variant="contained"
-                onClick={handleSaveClick}
-                >
+              <Button type="submit" variant="contained">
                 Salvar
               </Button>
             </div>
