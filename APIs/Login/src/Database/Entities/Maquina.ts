@@ -22,10 +22,10 @@ export class MaquinaDAO{
     }
 
      public async getMaquina(id_maquina?: string){
-        let sql = "SELECT id_maquina, cd_maquina, ds_nome_maquina, nr_disponibilidade_maquina, nr_parada_programada, nr_parada_nao_programada FROM tb_maquina WHERE fg_ativo = 1";
+        let sql = "SELECT id_maquina, cd_maquina, ds_nome_maquina, nr_disponibilidade_maquina, nr_parada_programada, nr_parada_nao_programada, fg_ativo FROM tb_maquina ";
         
         if(id_maquina){
-            sql += " AND id_maquina = ?";
+            sql += " WHERE id_maquina = ?";
         }
         
         const result = await this.db.query(sql, [id_maquina]);
