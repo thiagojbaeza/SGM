@@ -75,39 +75,26 @@ export default function UsuariosPage() {
 
   async function handleSaveClick(e) {
     e.preventDefault();
+    setError(null);
+
     try {
       const service = new loginService();
       const token = localStorage.getItem('token');
       const idUser = 1;
 
+      const payload = {
+        ds_nome_usuario: currentUser.ds_nome_usuario,
+        ds_senha: currentUser.ds_senha,
+        fg_ativo: currentUser.fg_ativo,
+        id_tipo_usuario: currentUser.id_tipo_usuario,
+        id_usuario_criacao: idUser,
+        id_usuario_ultima_alteracao: idUser
+      };
+
       if (currentUser.id_usuario) {
-        await service.updateUsuario(
-          currentUser.ds_nome_usuario,
-          currentUser.ds_senha,
-          currentUser.fg_ativo,
-          currentUser.id_tipo_usuario,
-          idUser,
-          token,
-          currentUser.id_usuario
-        );
-
-console.log('Payload PUT:', {
-  ds_nome_usuario: currentUser.ds_nome_usuario,
-  ds_senha: currentUser.ds_senha,
-  fg_ativo: currentUser.fg_ativo,
-  id_tipo_usuario: currentUser.id_tipo_usuario,
-  id_usuario_ultima_alteracao: idUser
-});
-
-
+        await service.updateUsuario(payload, token, currentUser.id_usuario);
       } else {
-        await service.createUsuario(token, {
-          ds_nome_usuario: currentUser.ds_nome_usuario,
-          ds_senha: currentUser.ds_senha,
-          fg_ativo: currentUser.fg_ativo,
-          id_tipo_usuario: currentUser.id_tipo_usuario,
-          id_usuario_criacao: idUser
-        });
+        await service.createUsuario(payload, token);
       }
 
       const data = await service.getUsuarios(token);
@@ -115,7 +102,8 @@ console.log('Payload PUT:', {
         setRows(data.result);
       }
       setMode('view');
-    } catch {
+    } catch (err) {
+      console.error('Erro ao salvar usuário:', err);
       setError('Erro ao salvar usuário');
     }
   }

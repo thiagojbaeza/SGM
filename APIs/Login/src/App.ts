@@ -7,7 +7,9 @@ const api = fastify({
 });
 
 await api.register(cors, {
-    origin:'*'
+    origin:'*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // inclua PUT aqui
+    allowedHeaders: ['Content-Type', 'Authorization', 'token']// se você usa tokens ou headers personalizados
 })
 
 AppFactory.build(api)

@@ -1,9 +1,13 @@
 import { create } from "apisauce";
-
+    
 export default class Rest {
-    constructor(){
+    constructor() {
         this.api = create({
-            baseURL: 'http://localhost:3000'
-        })
+            baseURL: 'http://localhost:3000',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        });
     }
 }

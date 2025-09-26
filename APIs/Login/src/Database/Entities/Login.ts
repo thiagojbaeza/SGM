@@ -20,7 +20,7 @@ export class LoginDAO{
         this.db = new Db();
     }
      public async getLogin(ds_nome_usuario: string, ds_senha: string){
-        const sql = "SELECT ds_nome_usuario, ds_senha FROM tb_login WHERE fg_ativo = 1 and ds_nome_usuario =? and ds_senha=? ";
+        const sql = "SELECT id_usuario, ds_nome_usuario, ds_senha FROM tb_login WHERE fg_ativo = 1 and ds_nome_usuario =? and ds_senha=? ";
         const result = await this.db.query(sql, [ds_nome_usuario, ds_senha]);
         return result as ILogin[];
     }
