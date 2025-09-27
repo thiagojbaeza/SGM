@@ -7,9 +7,9 @@ import TipoProdutos from './components/tipoprodutos/page';
 import Login from './components/login/page';
 import Usuarios from './components/usuarios/page.jsx';
 import Maquina from './components/maquina/page.jsx'
+import StatusMaquina from './components/statusmaquina/page.jsx'
 
 const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-//colocar a funcao para validar o token, caso negativo efetuar o logout e lipar o cache
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -53,6 +53,7 @@ function App() {
             <Route path="tipoprodutos" element={<TipoProdutos />} />
             <Route path="usuarios" element={<Usuarios />} />
             <Route path="maquina" element={<Maquina />} />
+            <Route path="statusmaquina" element={<StatusMaquina />} />
 
           </Route>
         )}

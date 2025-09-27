@@ -53,6 +53,12 @@ export default function Sidebar({ open }) {
               Máquinas
             </Link>
           </li>
+          <li className={location.pathname === '/statusmaquina' ? 'active' : ''}>
+            <Link to="/statusmaquina">
+              <FiTag className="icon" />
+              Status das Máquinas
+            </Link>
+          </li>
           <li>
             <button onClick={openModal}>
               <FiLogOut className="icon" />

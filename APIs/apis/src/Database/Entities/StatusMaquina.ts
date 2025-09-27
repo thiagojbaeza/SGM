@@ -19,10 +19,10 @@ export class StatusMaquinaDAO{
     }
 
      public async getStatusMaquina(id_status_maquina?: string){
-        let sql = "SELECT id_status_maquina, ds_status_maquina, cd_rgb FROM tb_status_maquina WHERE fg_ativo = 1";
+        let sql = "SELECT id_status_maquina, ds_status_maquina, cd_rgb, fg_ativo FROM tb_status_maquina";
         
         if(id_status_maquina){
-            sql += " AND id_status_maquina = ?";
+            sql += " WHERE id_status_maquina = ?";
         }
         
         const result = await this.db.query(sql, [id_status_maquina]);
