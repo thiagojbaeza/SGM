@@ -59,6 +59,18 @@ export default function Sidebar({ open }) {
               Status das Máquinas
             </Link>
           </li>
+          <li className={location.pathname === '/motivopausa' ? 'active' : ''}>
+            <Link to="/motivopausa">
+              <FiTag className="icon" />
+              Motivo da Pausa
+            </Link>
+          </li>
+          <li className={location.pathname === '/motivorefugo' ? 'active' : ''}>
+            <Link to="/motivorefugo">
+              <FiTag className="icon" />
+              Motivo do Refugo
+            </Link>
+          </li>
           <li>
             <button onClick={openModal}>
               <FiLogOut className="icon" />

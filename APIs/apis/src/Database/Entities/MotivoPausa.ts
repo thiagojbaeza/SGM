@@ -18,10 +18,10 @@ export class MotivoPausaDAO{
     }
 
      public async getMotivoPausa(id_motivo_pausa?: string){
-        let sql = "SELECT id_motivo_pausa, ds_motivo_pausa FROM tb_motivo_pausa WHERE fg_ativo = 1";
+        let sql = "SELECT id_motivo_pausa, ds_motivo_pausa, fg_ativo FROM tb_motivo_pausa";
         
         if(id_motivo_pausa){
-            sql += " AND id_motivo_pausa = ?";
+            sql += " WHERE id_motivo_pausa = ?";
         }
         
         const result = await this.db.query(sql, [id_motivo_pausa]);

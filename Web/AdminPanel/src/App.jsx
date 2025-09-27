@@ -8,6 +8,8 @@ import Login from './components/login/page';
 import Usuarios from './components/usuarios/page.jsx';
 import Maquina from './components/maquina/page.jsx'
 import StatusMaquina from './components/statusmaquina/page.jsx'
+import MotivoPausa from './components/motivopausa/page.jsx'
+import MotivoRefugo from './components/motivorefugo/page.jsx'
 
 const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 
@@ -54,6 +56,8 @@ function App() {
             <Route path="usuarios" element={<Usuarios />} />
             <Route path="maquina" element={<Maquina />} />
             <Route path="statusmaquina" element={<StatusMaquina />} />
+            <Route path="motivopausa" element={<MotivoPausa />} />
+            <Route path="motivorefugo" element={<MotivoRefugo />} />
 
           </Route>
         )}

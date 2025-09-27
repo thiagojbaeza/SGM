@@ -18,10 +18,10 @@ export class MotivoRefugoDAO{
     }
 
      public async getMotivoRefugo(id_motivo_refugo?: string){
-        let sql = "SELECT id_motivo_refugo, ds_motivo_refugo FROM tb_motivo_refugo WHERE fg_ativo = 1";
+        let sql = "SELECT id_motivo_refugo, ds_motivo_refugo, fg_ativo FROM tb_motivo_refugo";
         
         if(id_motivo_refugo){
-            sql += " AND id_motivo_refugo = ?";
+            sql += " WHERE id_motivo_refugo = ?";
         }
         
         const result = await this.db.query(sql, [id_motivo_refugo]);
