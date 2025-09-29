@@ -10,7 +10,7 @@ export class LoginController{
         if(result === undefined || result.length === 0){
             return {success: false, token: null}
         }else{
-            return {success: true, token: this.token.createToken(login), id_usuario: result[0].id_usuario, ds_usuario: result[0].ds_nome_usuario}
+            return {success: true, token: this.token.createToken(login), id_usuario: result[0].id_usuario, ds_usuario: result[0].ds_nome_usuario, id_tipo_usuario: result[0].id_tipo_usuario}
         }
     }
 

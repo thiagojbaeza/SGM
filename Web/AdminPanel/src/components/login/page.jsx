@@ -16,6 +16,7 @@ export default function Login() {
       localStorage.setItem('token', data.result.token);
       localStorage.setItem('idUser', data.result.id_usuario);
       localStorage.setItem('nameUser', data.result.ds_usuario);
+      localStorage.setItem('typeUser', data.result.id_tipo_usuario)
       window.location.reload();
     } else {
       setError('Usuário ou senha inválidos');
