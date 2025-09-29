@@ -73,3 +73,25 @@
   border: none;
   cursor: pointer;
 }
+
+.menu-button {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  font-size: 1.1em;
+  padding: 10px 15px;
+  width: 100%;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.menu-button:hover {
+  background-color: #f0f0f0;
+}
+
+.menu-text {
+  margin-left: 10px;
+  font-size: 1.1em;
+}

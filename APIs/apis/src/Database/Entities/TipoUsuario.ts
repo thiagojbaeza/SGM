@@ -18,10 +18,10 @@ export class TipoUsuarioDAO{
     }
 
      public async getTipoUsuario(id_tipo_usuario?: string){
-        let sql = "SELECT id_tipo_usuario, ds_tipo_usuario FROM tb_tipo_usuario WHERE fg_ativo = 1";
+        let sql = "SELECT id_tipo_usuario, ds_tipo_usuario, fg_ativo FROM tb_tipo_usuario";
         
         if(id_tipo_usuario){
-            sql += " AND id_tipo_usuario = ?";
+            sql += " WHERE id_tipo_usuario = ?";
         }
         
         const result = await this.db.query(sql, [id_tipo_usuario]);
