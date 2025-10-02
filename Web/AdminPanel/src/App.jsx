@@ -11,6 +11,7 @@ import StatusMaquina from './components/statusmaquina/page.jsx'
 import MotivoPausa from './components/motivopausa/page.jsx'
 import MotivoRefugo from './components/motivorefugo/page.jsx'
 import TipoUsuario from './components/tipousuario/page.jsx'
+import ControleMaquina from './components/controlemaquina/page.jsx'
 
 const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 
@@ -60,6 +61,7 @@ function App() {
             <Route path="motivopausa" element={<MotivoPausa />} />
             <Route path="motivorefugo" element={<MotivoRefugo />} />
             <Route path="tipousuario" element={<TipoUsuario />} />
+            <Route path="controlemaquina" element={<ControleMaquina />} />
 
           </Route>
         )}

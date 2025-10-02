@@ -125,7 +125,7 @@ export default function Sidebar({ open }) {
         </div>
         <div className="slide-section">
           <ul>
-            <li><Link to="/maquina" onClick={() => setOperacionalOpen(false)}>Máquina</Link></li>
+            <li><Link to="/controlemaquina" onClick={() => setOperacionalOpen(false)}>Controle Máquina</Link></li>
           </ul>
         </div>
       </div>
